@@ -19,7 +19,16 @@ app.get('/timetable/:id', async (req, res) => {
         res.status(200).json(thatclass)
     }
 })
-app.get('/')
+app.get('/timetable/:day', async (req, res) => {
+    const day = req.params.id;
+    const thatDay = await dbAll("SELECT * FROM orarend WHERE day=?;", [day])
+    if (!thatDay) {
+        return res.status(400).json({message: "Day not found"})
+    }
+    else {
+        res.status(200).json(thatDay)
+    }
+})
 
 app.use((req, res, next, err) =>{
     if (err){
