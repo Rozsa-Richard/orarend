@@ -30,7 +30,7 @@ export function dbRun(sql, params = []){
 
 export async function initializeDatabase(){
     await dbRun("DROP TABLE IF EXISTS orarend");
-    await dbRun("CREARE TABLE IF NOT EXISTS orarend (id INTIGER PRIMARY KEY AUTOINCREMENT, day STRING, classNumber INTEGER, className STRING)");
+    await dbRun("CREATE TABLE IF NOT EXISTS orarend (id INTEGER PRIMARY KEY AUTOINCREMENT, day STRING, classNumber INTEGER, className STRING)");
 
     const classes = [
         {day: "Hetfő", classNumber: 1, className: "Matek"},

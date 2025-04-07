@@ -20,7 +20,7 @@ app.get('/timetable/:id', async (req, res) => {
     }
 })
 app.get('/timetable/:day', async (req, res) => {
-    const day = req.params.id;
+    const day = req.params.day;
     const thatDay = await dbAll("SELECT * FROM orarend WHERE day=?;", [day])
     if (!thatDay) {
         return res.status(400).json({message: "Day not found"})
@@ -69,7 +69,6 @@ app.delete("/timetable/:id", async (req, res) => {
     await dbRun("DELETE FROM orarends WHERE id = ?;",[id]);
     es.status(200).json({message:"delete sucsessful"});
 })
-
 
 async function startServer() {
     await initializeDatabase();
