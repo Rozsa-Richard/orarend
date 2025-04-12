@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Órarend</title>
+  <style>
+    table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+      padding: 8px;
+    }
+    table {
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <h1>Órarend</h1>
+  <div>
+    <table id="timetable">
+      <thead>
+        <tr>
+          <th>Nap</th>
+          <th>Óra</th>
+          <th>Tantárgy</th>
+          <th>Művelet</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <h2>Új óra hozzáadása</h2>
+  <form id="addForm">
+    <label>Nap: <input type="text" id="day" required></label><br>
+    <label>Óra: <input type="number" id="hour" required></label><br>
+    <label>Tantárgy: <input type="text" id="subject" required></label><br>
+    <button type="submit">Hozzáadás</button>
+  </form>
+
+  <script>
+    const API_URL = "http://localhost:3000/timetable";
+
+    async function fetchTimetable() {
+      const res = await fetch(API_URL);
+      const data = await res.json();
+      renderTable(data);
+    }
+
+    function renderTable(data) {
+      const tbody = document.querySelector("#timetable tbody");
+      tbody.innerHTML = "";
+      data.forEach(item => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${item.day}</td>
+          <td>${item.hour}</td>
+          <td>${item.subject}</td>
+          <td><button onclick="deleteLesson(${item.id})">Törlés</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function deleteLesson(id) {
+      await fetch(`${API_URL}/${id}`, {
+        method: "DELETE"
+      });
+      fetchTimetable();
+    }
+
+    document.getElementById("addForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const day = document.getElementById("day").value;
+      const hour = document.getElementById("hour").value;
+      const subject = document.getElementById("subject").value;
+
+      await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ day, hour, subject })
+      });
+
+      e.target.reset();
+      fetchTimetable();
+    });
+
+    fetchTimetable();
+  </script>
+</body>
+</html>
