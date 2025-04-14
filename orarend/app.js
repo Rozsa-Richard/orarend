@@ -1,8 +1,10 @@
 import express from 'express'
 import { dbAll, initializeDatabase, dbGet,dbRun } from './Util/database.js'
+import cors from 'cors'
 
 const app = express()
 app.use(express.json())
+app.use(cors())
 
 app.get('/timetable', async (req, res)=> {
     const timetable = await dbAll("SELECT * FROM orarend");
@@ -66,7 +68,7 @@ app.delete("/timetable/:id", async (req, res) => {
     if (!thatclass){
         return res.status(404).json({message:"Missing data"});
     }
-    await dbRun("DELETE FROM orarends WHERE id = ?;",[id]);
+    await dbRun("DELETE FROM orarend WHERE id = ?;",[id]);
     es.status(200).json({message:"delete sucsessful"});
 })
 
