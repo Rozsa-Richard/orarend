@@ -7,7 +7,7 @@ app.use(express.json())
 app.use(cors())
 
 app.get('/timetable', async (req, res)=> {
-    const timetable = await dbAll("SELECT * FROM orarend");
+    const timetable = await dbAll("SELECT * FROM orarend ORDER BY day, classNumber");
     res.status(200).json(timetable)
 })
 
@@ -42,9 +42,14 @@ app.post("/timetable", async (req, res) => {
     if (!day || !classNumber || !className){
         return res.status(400).json({message: "Missing some data"})
     }
-    
-    const result = await dbRun("INSERT INTO orarend (day,classNumber,className) VALUES (?, ?, ?);",[day, classNumber,className])
-    res.status(201).json({id: result.lastID, day, classNumber, className});
+    const thatclass = await dbGet("SELECT * FROM orarend WHERE day=? AND classNumber = ?;", [day, classNumber])
+    if (!thatclass){
+        const result = await dbRun("INSERT INTO orarend (day,classNumber,className) VALUES (?, ?, ?);",[day, classNumber,className])
+        res.status(201).json({id: result.lastID, day, classNumber, className});
+    }
+    else {
+        res.status(201).json({message: "Van már ilyen óra"});
+    }
 })
 
 app.put("/timetable/:id", async (req, res) => {
@@ -69,7 +74,7 @@ app.delete("/timetable/:id", async (req, res) => {
         return res.status(404).json({message:"Missing data"});
     }
     await dbRun("DELETE FROM orarend WHERE id = ?;",[id]);
-    es.status(200).json({message:"delete sucsessful"});
+    es.status(201).json({message:"delete sucsessful"});
 })
 
 async function startServer() {

@@ -8,10 +8,27 @@
     table, th, td {
       border: 1px solid black;
       border-collapse: collapse;
+      text-align: center;
       padding: 8px;
     }
+    tr:nth-child(even) {
+            background-color: #f2f2f2; 
+        }
+    th {
+      background-color: #f2f2f2; 
+    }
     table {
-      width: 100%;
+      width: 80%;
+      margin: auto;
+    }
+    h1 {
+      text-align: center  ;
+    }
+    div {
+      margin: auto;
+    }
+    select {
+      display:grid;
     }
   </style>
 </head>
@@ -21,32 +38,49 @@
     <table id="timetable">
       <thead>
         <tr>
-          <th>Nap</th>
-          <th>Óra</th>
-          <th>Tantárgy</th>
-          <th>Művelet</th>
+          <th style="width:400px">Nap</th>
+          <th style="width:100px">Óra</th>
+          <th style="width:400px">Tantárgy</th>
+          <th style="width:200px">Művelet</th>
         </tr>
       </thead>
       <tbody></tbody>
     </table>
   </div>
 
-  <h2>Új óra hozzáadása</h2>
-  <form id="addForm">
-    <label>Nap: <input type="text" id="day" required></label><br>
-    <label>Óra: <input type="number" id="classNumber" required></label><br>
-    <label>Tantárgy: <input type="text" id="className" required></label><br>
-    <button type="submit">Hozzáadás</button>
-  </form>
-  <h2>Óra módosítása</h2>
-<form id="editForm" style="display:none;">
-  <input type="hidden" id="editId">
-  <label>Nap: <input type="text" id="editDay" required></label><br>
-  <label>Óra: <input type="number" id="editClassNumber" required></label><br>
-  <label>Tantárgy: <input type="text" id="editClassName" required></label><br>
-  <button type="submit">Mentés</button>
-  <button type="button" onclick="cancelEdit()">Mégse</button>
-</form>
+  <div style="width: 10%;">
+    <h2>Új óra hozzáadása</h2>
+    <form id="addForm">
+      <label>Nap:<br>
+      <select id="days" name="days" multiple>
+        <option value="Hétfő">Hétfő</option>
+        <option value="Kedd">Kedd</option>
+        <option value="Szerda">Szerda</option>
+        <option value="Csütörtök">Csütörtök</option>
+        <option value="Péntek">Péntek</option>
+      </select></label><br>
+      <label>Óra:      <input type="number" id="classNumber" required></label><br>
+      <label>Tantárgy: <input type="text" id="className" required></label><br>
+      <button type="submit" style="background-color: greenyellow;">Hozzáadás</button>
+    </form>
+  </div>
+  <div style="width: 10%;">
+    <form id="editForm" style="display:none;">
+      <h2>Óra módosítása</h2>
+      <input type="hidden" id="editId">
+      <label>Nap:<br>
+        <select id="editDay" name="days" multiple>
+          <option value="Hétfő">Hétfő</option>
+          <option value="Kedd">Kedd</option>
+          <option value="Szerda">Szerda</option>
+          <option value="Csütörtök">Csütörtök</option>
+          <option value="Péntek">Péntek</option>
+        </select></label><br>
+      <label>Óra: <input type="number" id="editClassNumber" required></label><br>
+      <label>Tantárgy: <input type="text" id="editClassName" required></label><br>
+      <button type="submit" style="background-color: greenyellow;">Mentés</button>
+    </form>
+  </div>
 
   <script>
     const API_URL = "http://localhost:3000/timetable";
@@ -67,8 +101,8 @@
           <td>${item.classNumber}</td>
           <td>${item.className}</td>
           <td>
-            <button onclick="editLesson(${item.id}, '${item.day}', ${item.classNumber}, '${item.className}')">Szerkesztés</button>
-            <button onclick="deleteLesson(${item.id})">Törlés</button>
+            <button style="background-color: greenyellow;" onclick="editLesson(${item.id}, '${item.day}', ${item.classNumber}, '${item.className}')">Szerkesztés</button>
+            <button style="background-color: red ;" onclick="deleteLesson(${item.id})">Törlés</button>
             </td>
         `;
         tbody.appendChild(tr);
@@ -112,7 +146,7 @@ document.getElementById("editForm").addEventListener("submit", async (e) => {
 
     document.getElementById("addForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const day = document.getElementById("day").value;
+      const day = document.getElementById("days").value;
       const classNumber = document.getElementById("classNumber").value;
       const className = document.getElementById("className").value;
 

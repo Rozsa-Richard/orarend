@@ -33,11 +33,11 @@ export async function initializeDatabase(){
     await dbRun("CREATE TABLE IF NOT EXISTS orarend (id INTEGER PRIMARY KEY AUTOINCREMENT, day STRING, classNumber INTEGER, className STRING)");
 
     const classes = [
-        {day: "Hetfő", classNumber: 1, className: "Matek"},
-        {day: "Hetfő", classNumber: 2, className: "Angol"},
-        {day: "Hetfő", classNumber: 3, className: "Tesi"},
-        {day: "Hetfő", classNumber: 4, className: "Tesi"},
-        {day: "Hetfő", classNumber: 5, className: "Nyelvtan"},
+        {day: "Hétfő", classNumber: 1, className: "Matek"},
+        {day: "Hétfő", classNumber: 2, className: "Angol"},
+        {day: "Hétfő", classNumber: 3, className: "Tesi"},
+        {day: "Hétfő", classNumber: 4, className: "Tesi"},
+        {day: "Hétfő", classNumber: 5, className: "Nyelvtan"},
 
     ]
     for (const i of classes){
